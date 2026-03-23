@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invila™ System Live - Monitor View</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --bg-dark: #0b0e14;
+            --panel-bg: #161b22;
+            --accent-blue: #00a3ff;
+            --kiw-purple: #3e2b85;
+        }
+
+        body {
+            background-color: #000;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Container Utama (Foto) */
+        .monitor-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 1200px;
+            aspect-ratio: 16 / 9;
+            background-image: url('image_5a5ee9.jpg'); /* Pastikan file foto di folder yang sama */
+            background-size: cover;
+            background-position: center;
+            border-radius: 40px;
+            border: 8px solid white;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Area HMI di dalam Monitor */
+        .hmi-screen-area {
+            position: absolute;
+            /* Posisi ini disesuaikan dengan letak layar monitor di foto */
+            top: 2%; 
+            left: 32.5%; 
+            width: 41%; 
+            height: 94%;
+            background: var(--bg-dark);
+            overflow-y: auto;
+            border-radius: 2px;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #e6edf3;
+            transform: perspective(1000px) rotateY(-2deg); /* Memberi sedikit efek dimensi */
+            font-size: 0.5rem; /* Mengecilkan skala konten agar muat di monitor */
+        }
+
+        /* Styling Konten HMI (Disesuaikan untuk layar kecil) */
+        .hmi-header {
+            background: #0d1117;
+            padding: 10px;
+            border-bottom: 2px solid var(--accent-blue);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .hmi-card {
+            background: var(--panel-bg);
+            margin: 8px;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #30363d;
+        }
+
+        .stat-val {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--accent-blue);
+        }
+
+        /* Animasi Pipa */
+        .pipe-small {
+            height: 8px;
+            background: #21262d;
+            border-radius: 4px;
+            position: relative;
+            overflow: hidden;
+            margin: 5px 0;
+        }
+        .flow {
+            position: absolute;
+            height: 100%; width: 100%;
+            background: linear-gradient(90deg, transparent, var(--accent-blue), transparent);
+            animation: flowAnim 2s linear infinite;
+        }
+        @keyframes flowAnim {
+            from { transform: translateX(-100%); }
+            to { transform: translateX(100%); }
+        }
+
+        /* Status Indicator Foto */
+        .status-tag {
+            position: absolute;
+            bottom: 20px;
+            left: 30px;
+            background: rgba(0,0,0,0.5);
+            padding: 5px 12px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="monitor-wrapper">
+        <div class="hmi-screen-area">
+            <div class="hmi-header">
+                <div style="font-weight: bold; color: white;">invila™</div>
+                <div id="hmi-clock" style="color: var(--accent-blue);">00:00:00</div>
+            </div>
+
+            <div class="hmi-card">
+                <div style="font-size: 0.6rem; color: #8b949e;">TOTAL PRODUKSI</div>
+                <div class="stat-val" id="prod-val">1.245</div>
+                <div style="color: #238636;">● RUNNING</div>
+            </div>
+
+            <div class="hmi-card" style="text-align: center;">
+                <div style="font-size: 0.6rem; margin-bottom: 5px;">INTAKE FLOW</div>
+                <div class="pipe-small"><div class="flow"></div></div>
+                <div style="font-size: 0.5rem; color: #8b949e; margin-top: 5px;">S7-1200 CONNECTED</div>
+            </div>
+
+            <div class="hmi-card">
+                <div style="font-size: 0.6rem; color: #8b949e;">TDS QUALITY</div>
+                <div class="stat-val">185 <span style="font-size: 0.6rem;">PPM</span></div>
+            </div>
+        </div>
+
+        <div class="status-tag">
+            <span class="w-2.5 h-2.5 bg-green-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.8)]"></span>
+            <span class="text-[10px] font-bold text-white uppercase tracking-widest">DECN-IV™ System Live</span>
+        </div>
+    </div>
+
+    <script>
+        // Jam Real-time
+        function updateHMIClock() {
+            const now = new Date();
+            document.getElementById('hmi-clock').innerText = now.toLocaleTimeString('id-ID');
+        }
+        setInterval(updateHMIClock, 1000);
+
+        // Simulasi Produksi
+        let p = 1245;
+        setInterval(() => {
+            p += Math.floor(Math.random() * 2);
+            document.getElementById('prod-val').innerText = p.toLocaleString();
+        }, 3000);
+    </script>
+</body>
+</html>
