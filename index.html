@@ -10,106 +10,80 @@
             --bg-dark: #0b0e14;
             --panel-bg: #161b22;
             --accent-blue: #00a3ff;
-            --kiw-purple: #3e2b85;
         }
 
         body {
-            background-color: #000;
+            background-color: #0f172a;
             margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             overflow: hidden;
+            font-family: 'Inter', sans-serif;
         }
 
-        /* Container Utama (Foto) */
+        /* Container Utama Menggunakan Gambar PNG kamu */
         .monitor-wrapper {
             position: relative;
-            width: 100%;
-            max-width: 1200px;
+            width: 95%;
+            max-width: 1100px;
             aspect-ratio: 16 / 9;
-            background-image: url('image_5a5ee9.jpg'); /* Pastikan file foto di folder yang sama */
+            /* DISESUAIKAN: Nama file sesuai gambar kamu */
+            background-image: url('image_5a5ee9.png'); 
             background-size: cover;
             background-position: center;
-            border-radius: 40px;
-            border: 8px solid white;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            border-radius: 24px;
+            border: 6px solid #ffffff;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
         }
 
-        /* Area HMI di dalam Monitor */
+        /* Area Overlay HMI pada Monitor */
         .hmi-screen-area {
             position: absolute;
-            /* Posisi ini disesuaikan dengan letak layar monitor di foto */
-            top: 2%; 
-            left: 32.5%; 
-            width: 41%; 
-            height: 94%;
+            top: 2.2%; 
+            left: 32.6%; 
+            width: 40.8%; 
+            height: 93.5%;
             background: var(--bg-dark);
             overflow-y: auto;
             border-radius: 2px;
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             color: #e6edf3;
-            transform: perspective(1000px) rotateY(-2deg); /* Memberi sedikit efek dimensi */
-            font-size: 0.5rem; /* Mengecilkan skala konten agar muat di monitor */
+            /* Efek perspektif agar menyatu dengan layar miring */
+            transform: perspective(1000px) rotateY(-1.5deg);
+            padding: 5px;
         }
 
-        /* Styling Konten HMI (Disesuaikan untuk layar kecil) */
-        .hmi-header {
-            background: #0d1117;
-            padding: 10px;
-            border-bottom: 2px solid var(--accent-blue);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
+        /* Mini Dashboard inside monitor */
         .hmi-card {
             background: var(--panel-bg);
-            margin: 8px;
-            padding: 10px;
-            border-radius: 8px;
             border: 1px solid #30363d;
+            border-radius: 6px;
+            padding: 8px;
+            margin-bottom: 6px;
         }
 
-        .stat-val {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--accent-blue);
-        }
+        .hmi-label { font-size: 0.5rem; color: #8b949e; text-transform: uppercase; }
+        .hmi-value { font-size: 1.2rem; font-weight: 800; color: var(--accent-blue); }
 
-        /* Animasi Pipa */
-        .pipe-small {
-            height: 8px;
+        /* Animasi Aliran Air Kecil */
+        .mini-pipe {
+            height: 6px;
             background: #21262d;
-            border-radius: 4px;
+            border-radius: 3px;
             position: relative;
             overflow: hidden;
-            margin: 5px 0;
+            margin: 4px 0;
         }
-        .flow {
+        .mini-flow {
             position: absolute;
             height: 100%; width: 100%;
             background: linear-gradient(90deg, transparent, var(--accent-blue), transparent);
-            animation: flowAnim 2s linear infinite;
+            animation: flowMove 2s linear infinite;
         }
-        @keyframes flowAnim {
+        @keyframes flowMove {
             from { transform: translateX(-100%); }
             to { transform: translateX(100%); }
-        }
-
-        /* Status Indicator Foto */
-        .status-tag {
-            position: absolute;
-            bottom: 20px;
-            left: 30px;
-            background: rgba(0,0,0,0.5);
-            padding: 5px 12px;
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
     </style>
 </head>
@@ -117,49 +91,49 @@
 
     <div class="monitor-wrapper">
         <div class="hmi-screen-area">
-            <div class="hmi-header">
-                <div style="font-weight: bold; color: white;">invila™</div>
-                <div id="hmi-clock" style="color: var(--accent-blue);">00:00:00</div>
+            <div class="flex justify-between items-center mb-3 border-b border-slate-700 pb-1">
+                <span class="text-[10px] font-bold tracking-tighter">INVILA™ HMI</span>
+                <span id="timer" class="text-[9px] text-cyan-400 font-mono">00:00:00</span>
             </div>
 
             <div class="hmi-card">
-                <div style="font-size: 0.6rem; color: #8b949e;">TOTAL PRODUKSI</div>
-                <div class="stat-val" id="prod-val">1.245</div>
-                <div style="color: #238636;">● RUNNING</div>
-            </div>
-
-            <div class="hmi-card" style="text-align: center;">
-                <div style="font-size: 0.6rem; margin-bottom: 5px;">INTAKE FLOW</div>
-                <div class="pipe-small"><div class="flow"></div></div>
-                <div style="font-size: 0.5rem; color: #8b949e; margin-top: 5px;">S7-1200 CONNECTED</div>
+                <p class="hmi-label">Total Production</p>
+                <div class="hmi-value" id="prod-val">1.245</div>
+                <p class="text-[7px] text-green-500 font-bold">● SYSTEM OPTIMAL</p>
             </div>
 
             <div class="hmi-card">
-                <div style="font-size: 0.6rem; color: #8b949e;">TDS QUALITY</div>
-                <div class="stat-val">185 <span style="font-size: 0.6rem;">PPM</span></div>
+                <p class="hmi-label">Water Treatment Flow</p>
+                <div class="mini-pipe"><div class="mini-flow"></div></div>
+                <p class="text-[6px] text-slate-500 italic">Live Data: Siemens S7-1200</p>
+            </div>
+
+            <div class="hmi-card">
+                <p class="hmi-label">Current TDS</p>
+                <div class="hmi-value">185 <span class="text-[8px]">PPM</span></div>
             </div>
         </div>
 
-        <div class="status-tag">
-            <span class="w-2.5 h-2.5 bg-green-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.8)]"></span>
-            <span class="text-[10px] font-bold text-white uppercase tracking-widest">DECN-IV™ System Live</span>
+        <div class="absolute bottom-6 left-8 flex items-center gap-2 bg-black/40 backdrop-blur-sm px-3 py-1 rounded-full">
+            <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+            <span class="text-[9px] font-black text-white uppercase tracking-widest">DECN-IV™ System Live</span>
         </div>
     </div>
 
     <script>
-        // Jam Real-time
-        function updateHMIClock() {
+        // Update jam HMI
+        function startClock() {
             const now = new Date();
-            document.getElementById('hmi-clock').innerText = now.toLocaleTimeString('id-ID');
+            document.getElementById('timer').innerText = now.toLocaleTimeString('id-ID');
         }
-        setInterval(updateHMIClock, 1000);
+        setInterval(startClock, 1000);
 
-        // Simulasi Produksi
-        let p = 1245;
+        // Simulasi data produksi
+        let val = 1245;
         setInterval(() => {
-            p += Math.floor(Math.random() * 2);
-            document.getElementById('prod-val').innerText = p.toLocaleString();
-        }, 3000);
+            val += Math.floor(Math.random() * 2);
+            document.getElementById('prod-val').innerText = val.toLocaleString();
+        }, 4000);
     </script>
 </body>
 </html>
